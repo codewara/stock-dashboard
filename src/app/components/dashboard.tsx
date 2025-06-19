@@ -21,7 +21,7 @@ const Dashboard = () => {
     lastUpdated: new Date().toISOString()
   };
   const [period, setPeriod] = useState<'daily' | 'monthly' | 'annually'>('daily');
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
+  const [selectedYear, setSelectedYear] = useState<string>('2025-Q1');
   const { chart, loading: chartLoading } = useChart(period, mockFinanceData.symbol);
   const { data, loading, error } = useData();
   const { financialSummary, loading: financialLoading } = useFinancialSummary(selectedYear, mockFinanceData.symbol.replace('.JK', ''));
@@ -100,7 +100,8 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-        </div>        {/* financial summary */}
+        </div>        
+        {/* financial summary */}
         <div className="col-start-2 row-start-1 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
             <div className="flex justify-between items-center mb-6 pb-4 border-b-2 border-slate-200 dark:border-gray-700">
               <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
@@ -116,7 +117,7 @@ const Dashboard = () => {
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
                 <option value="2024">2024</option>
-                <option value="2025">2025</option>
+                <option value="2025-Q1">2025-Q1</option>
               </select>
             </div>
             <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -127,76 +128,87 @@ const Dashboard = () => {
                 </div>
               ) : financialSummary ? (
                 <>
+                  {/* Currency indicator */}
+                  <div className="flex justify-center mb-4">
+                    <span className={`px-4 py-2 rounded-full text-sm font-bold ${
+                      financialSummary.currency === 'USD' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
+                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                    }`}>
+                      Currency: {financialSummary.currency}
+                    </span>
+                  </div>
+                  
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border-l-4 border-blue-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Revenue</label>
                     <span className="font-bold text-lg text-blue-700 dark:text-blue-300">
-                      Rp {financialSummary.revenue.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.revenue.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border-l-4 border-green-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Gross Profit</label>
                     <span className="font-bold text-lg text-green-700 dark:text-green-300">
-                      Rp {financialSummary.grossProfit.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.grossProfit.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-lg border-l-4 border-purple-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Operating Profit</label>
                     <span className="font-bold text-lg text-purple-700 dark:text-purple-300">
-                      Rp {financialSummary.operatingProfit.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.operatingProfit.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg border-l-4 border-orange-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Net Profit</label>
                     <span className="font-bold text-lg text-orange-700 dark:text-orange-300">
-                      Rp {financialSummary.netProfit.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.netProfit.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-lg border-l-4 border-teal-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Cash</label>
                     <span className="font-bold text-lg text-teal-700 dark:text-teal-300">
-                      Rp {financialSummary.cash.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.cash.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 rounded-lg border-l-4 border-pink-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Total Assets</label>
                     <span className="font-bold text-lg text-pink-700 dark:text-pink-300">
-                      Rp {financialSummary.totalAssets.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.totalAssets.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-lg border-l-4 border-yellow-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Short Term Borrowing</label>
                     <span className="font-bold text-lg text-yellow-700 dark:text-yellow-300">
-                      Rp {financialSummary.shortTermBorrowing.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.shortTermBorrowing.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg border-l-4 border-red-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Long Term Borrowing</label>
                     <span className="font-bold text-lg text-red-700 dark:text-red-300">
-                      Rp {financialSummary.longTermBorrowing.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.longTermBorrowing.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg border-l-4 border-indigo-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Total Equity</label>
                     <span className="font-bold text-lg text-indigo-700 dark:text-indigo-300">
-                      Rp {financialSummary.totalEquity.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.totalEquity.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-lg border-l-4 border-emerald-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Cash from Operating</label>
                     <span className="font-bold text-lg text-emerald-700 dark:text-emerald-300">
-                      Rp {financialSummary.cashFromOperating.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.cashFromOperating.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-lg border-l-4 border-violet-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Cash from Investing</label>
                     <span className="font-bold text-lg text-violet-700 dark:text-violet-300">
-                      Rp {financialSummary.cashFromInvesting.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.cashFromInvesting.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-lg border-l-4 border-cyan-500">
                     <label className="text-gray-700 dark:text-gray-300 font-medium">Cash from Financing</label>
                     <span className="font-bold text-lg text-cyan-700 dark:text-cyan-300">
-                      Rp {financialSummary.cashFromFinancing.toLocaleString()}
+                      {financialSummary.currency === 'USD' ? '$' : 'Rp'} {financialSummary.cashFromFinancing.toLocaleString()}
                     </span>
                   </div>
                   <div className="text-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">

@@ -40,6 +40,7 @@ export interface FinancialSummary {
     cashFromOperating: number;
     cashFromInvesting: number;
     cashFromFinancing: number;
+    currency: string;
 }
 
 export interface ApiResponse<T> {

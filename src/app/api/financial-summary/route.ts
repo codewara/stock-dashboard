@@ -6,15 +6,15 @@ const YEAR_COLLECTIONS: Record<string, string> = {
   '2022': 'idx_2022',
   '2023': 'idx_2023',
   '2024': 'idx_2024',
-  '2025': 'idx_2025_q1',
+  '2025-q1': 'idx_2025_q1',
 };
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const year = url.searchParams.get('year') || '2024';
+    const year = url.searchParams.get('year') || '2025-q1';
     const stock = url.searchParams.get('stock') || 'AALI';
-    const collectionName = YEAR_COLLECTIONS[year] || YEAR_COLLECTIONS['2024'];
+    const collectionName = YEAR_COLLECTIONS[year] || YEAR_COLLECTIONS['2025-q1'];
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB);
@@ -48,6 +48,7 @@ export async function GET(req: Request) {
       cashFromOperating: financialData.CashFromOperatin || 0,
       cashFromInvesting: financialData.CashFromInvesting || 0,
       cashFromFinancing: financialData.CashFromFinancing || 0,
+      currency: financialData.Currency || 'IDR',
     };
 
     return NextResponse.json({
