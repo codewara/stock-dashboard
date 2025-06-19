@@ -46,10 +46,11 @@ export const fetchFinancialSummary = async (year: string, stock: string): Promis
 };
 
 export interface NewsItem {
-  judul: string;
-  ringkasan: string;
-  isi: string;
-  tanggal: string;
+  ticker: string;
+  title: string;
+  content: string;
+  summary: string;
+  date: string;
 }
 
 export const fetchNews = async (): Promise<NewsItem[]> => {

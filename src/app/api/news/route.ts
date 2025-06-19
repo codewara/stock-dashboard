@@ -5,8 +5,8 @@ export async function GET() {
   try {
     const client = await clientPromise;
     const db = client.db('T3');
-    const berita = await db.collection('BERITA_IQPLUS')
-      .find({}, { projection: { _id: 0, judul: 1, ringkasan: 1, isi: 1, tanggal: 1} })
+    const berita = await db.collection('iqplus_news')
+      .find({}, { projection: { _id: 0, ticker: 1, title: 1, content: 1, summary: 1, date:1} })
       .sort({ _id: -1 })
       .limit(20)
       .toArray();

@@ -222,11 +222,12 @@ const Dashboard = () => {
           </h3>
           {selectedNews ? (
             <div>
-              <div className="font-bold text-2xl mb-2 text-gray-800 dark:text-gray-200">{selectedNews.judul}</div>
-              { selectedNews.isi != selectedNews.ringkasan ? (
-                <div className="text-gray-700 dark:text-gray-300 pb-4 mb-4 border-b-2 border-slate-200 dark:border-gray-700">{selectedNews.ringkasan}</div>
-              ) : null }
-              <div className="text-gray-700 dark:text-gray-300 mb-4">{selectedNews.isi}</div>
+              <div className="font-bold text-2xl mb-2 text-gray-800 dark:text-gray-200">{selectedNews.title}</div>
+              <div className="text-gray-500 text-sm mb-2">{selectedNews.date}</div>
+              {selectedNews.summary && (
+                <div className="text-gray-700 dark:text-gray-300 pb-4 mb-4 border-b-2 border-slate-200 dark:border-gray-700">{selectedNews.summary}</div>
+              )}
+              <div className="text-gray-700 dark:text-gray-300 mb-4">{selectedNews.content}</div>
             </div>
           ) : (
             <div className="text-gray-500">Pilih berita dari News List untuk melihat detail.</div>
@@ -259,16 +260,16 @@ const Dashboard = () => {
                 key={idx} 
                   onClick={() => setSelectedNews(item)} 
                   className={`p-4 rounded-lg transition-all duration-200 cursor-pointer border-2 ${
-                    selectedNews?.judul === item.judul 
+                    selectedNews?.title === item.title 
                       ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-300 dark:border-indigo-600' 
                       : 'bg-slate-50 dark:bg-gray-800 border-transparent hover:bg-slate-100 dark:hover:bg-gray-700 hover:border-slate-200 dark:hover:border-gray-600'
                   } hover:transform hover:-translate-y-1 hover:shadow-md`}
                 >
                   <div className="font-medium text-gray-800 dark:text-gray-200 mb-2 line-clamp-2">
-                    {item.judul}
+                    {item.title}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {item.tanggal}
+                    {item.date}
                   </div>
                 </div>
               ))}
