@@ -32,3 +32,20 @@ export const fetchChart = async (period: 'daily' | 'monthly' | 'annually', stock
         else throw new Error(response.data.message || 'API returned unsuccessful response');
     } catch { return { labels: [], datasets: [] } }
 };
+
+export interface NewsItem {
+  judul: string;
+  ringkasan: string;
+}
+
+export const fetchNews = async (): Promise<NewsItem[]> => {
+  try {
+    const response = await api.get<{ success: boolean; data: NewsItem[] }>(
+      '/api/news'
+    );
+    if (response.data.success) return response.data.data;
+    else throw new Error('API returned unsuccessful response');
+  } catch {
+    return [];
+  }
+};

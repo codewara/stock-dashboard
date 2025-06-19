@@ -1,8 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChartDataset } from 'chart.js';
 import { useChart, useData } from '@/app/hooks';
 import Chart from '@/app/components/chart';
+import { fetchNews, NewsItem } from '@/app/services/api';
+
+// Mock news data for demonstration (replace with actual data)
+const mockNews = [
+  { id: 1, title: "AALI Reports Record Revenue in Q1", date: "2024-06-01" },
+  { id: 2, title: "Palm Oil Prices Surge, Boosting AALI", date: "2024-05-28" },
+  { id: 3, title: "AALI Expands Sustainable Farming Initiatives", date: "2024-05-20" }
+];
 
 const Dashboard = () => {
   // Mock data for demonstration (replace with actual data)
@@ -16,6 +24,23 @@ const Dashboard = () => {
   const [period, setPeriod] = useState<'daily' | 'monthly' | 'annually'>('daily');
   const { chart, loading: chartLoading } = useChart(period, mockFinanceData.symbol);
   const { data, loading, error } = useData();
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [newsLoading, setNewsLoading] = useState(true);
+  const [newsError, setNewsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getNews = async () => {
+      try {
+        const data = await fetchNews();
+        setNews(data);
+      } catch {
+        setNewsError('Failed to fetch news');
+      } finally {
+        setNewsLoading(false);
+      }
+    };
+    getNews();
+  }, []);
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[400px] text-slate-500">
@@ -32,13 +57,6 @@ const Dashboard = () => {
       </div>
     </div>
   );
-
-  const mockNews = [
-    { id: 1, title: "Market Update", date: "01/05/25" },
-    { id: 2, title: "Tech Stocks Rise", date: "02/05/25" },
-    { id: 3, title: "Economic Outlook", date: "03/05/25" },
-    { id: 4, title: "Industry Analysis", date: "04/05/25" }
-  ];
 
   return (
     <div className="max-w-[1400px] mx-auto p-8 min-h-screen">
@@ -122,17 +140,25 @@ const Dashboard = () => {
 
         {/* news section */}
         <div className="col-start-1 row-start-2 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
-            <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
-              Latest News
-            </h3>
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
-                News Headline
-              </h4>
-              <p className="text-gray-600 dark:text-gray-400">
-                Latest market developments and company announcements affecting stock performance...
-              </p>
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
+            Latest News
+          </h3>
+          {newsLoading ? (
+            <div className="text-gray-500">Loading news...</div>
+          ) : newsError ? (
+            <div className="text-red-500">{newsError}</div>
+          ) : news.length === 0 ? (
+            <div className="text-gray-500">No news available.</div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {news.map((item, idx) => (
+                <div key={idx} className="p-3 bg-slate-50 dark:bg-gray-800 rounded-lg mb-2">
+                  <div className="font-semibold text-gray-800 dark:text-gray-200 mb-1">{item.judul}</div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">{item.ringkasan}</div>
+                </div>
+              ))}
             </div>
+          )}
         </div>
 
         {/* news list */}
