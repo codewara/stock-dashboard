@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ChartData } from 'chart.js';
-import { DataType, ApiResponse } from '@/app/types';
+import { DataType, ApiResponse, FinancialSummary } from '@/app/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -31,6 +31,18 @@ export const fetchChart = async (period: 'daily' | 'monthly' | 'annually', stock
         if (response.data.success) return response.data.data.charts;
         else throw new Error(response.data.message || 'API returned unsuccessful response');
     } catch { return { labels: [], datasets: [] } }
+};
+
+export const fetchFinancialSummary = async (year: string, stock: string): Promise<FinancialSummary | null> => {
+    try {
+        const response = await api.get<ApiResponse<FinancialSummary>>('/api/financial-summary', { 
+            params: { year, stock } 
+        });
+        if (response.data.success) return response.data.data;
+        else throw new Error(response.data.message || 'API returned unsuccessful response');
+    } catch {
+        return null;
+    }
 };
 
 export interface NewsItem {

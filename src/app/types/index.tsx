@@ -24,6 +24,24 @@ export interface DataType {
     lastUpdated: string;
 }
 
+export interface FinancialSummary {
+    emitten: string;
+    year: number;
+    period: string;
+    revenue: number;
+    grossProfit: number;
+    operatingProfit: number;
+    netProfit: number;
+    cash: number;
+    totalAssets: number;
+    shortTermBorrowing: number;
+    longTermBorrowing: number;
+    totalEquity: number;
+    cashFromOperating: number;
+    cashFromInvesting: number;
+    cashFromFinancing: number;
+}
+
 export interface ApiResponse<T> {
     success: boolean;
     data: T;
