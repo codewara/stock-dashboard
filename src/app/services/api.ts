@@ -36,6 +36,8 @@ export const fetchChart = async (period: 'daily' | 'monthly' | 'annually', stock
 export interface NewsItem {
   judul: string;
   ringkasan: string;
+  isi: string;
+  tanggal: string;
 }
 
 export const fetchNews = async (): Promise<NewsItem[]> => {

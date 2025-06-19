@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
   const [newsError, setNewsError] = useState<string | null>(null);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   useEffect(() => {
     const getNews = async () => {
@@ -138,10 +139,28 @@ const Dashboard = () => {
             </div>
         </div>
 
-        {/* news section */}
+        {/* detail news section */}
         <div className="col-start-1 row-start-2 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
-            Latest News
+            Detail News
+          </h3>
+          {selectedNews ? (
+            <div>
+              <div className="font-bold text-2xl mb-2 text-gray-800 dark:text-gray-200">{selectedNews.judul}</div>
+              { selectedNews.isi != selectedNews.ringkasan ? (
+                <div className="text-gray-700 dark:text-gray-300 pb-4 mb-4 border-b-2 border-slate-200 dark:border-gray-700">{selectedNews.ringkasan}</div>
+              ) : null }
+              <div className="text-gray-700 dark:text-gray-300 mb-4">{selectedNews.isi}</div>
+            </div>
+          ) : (
+            <div className="text-gray-500">Pilih berita dari News List untuk melihat detail.</div>
+          )}
+        </div>
+
+        {/* news list section */}
+        <div className="col-start-2 row-start-2 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
+            News List
           </h3>
           {newsLoading ? (
             <div className="text-gray-500">Loading news...</div>
@@ -152,32 +171,17 @@ const Dashboard = () => {
           ) : (
             <div className="flex flex-col gap-3">
               {news.map((item, idx) => (
-                <div key={idx} className="p-3 bg-slate-50 dark:bg-gray-800 rounded-lg mb-2">
-                  <div className="font-semibold text-gray-800 dark:text-gray-200 mb-1">{item.judul}</div>
-                  <div className="text-gray-600 dark:text-gray-400 text-sm">{item.ringkasan}</div>
-                </div>
+                <div key={ idx } onClick={()=> setSelectedNews(item)} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-gray-800 rounded-lg transition-all duration-200 cursor-pointer hover:bg-slate-150 dark:hover:bg-gray-700 hover:transform hover:-translate-y-1">
+                <span className="font-medium text-gray-800 dark:text-gray-200 flex-1">
+                  { item.judul }
+                </span>
+                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  { item.tanggal }
+                </span>
+              </div>
               ))}
             </div>
           )}
-        </div>
-
-        {/* news list */}
-        <div className="col-start-2 row-start-2 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
-            News List
-          </h3>
-          <div className="flex flex-col gap-3">
-            {mockNews.map((news) => (
-              <div key={ news.id } className="flex justify-between items-center p-3 bg-slate-50 dark:bg-gray-800 rounded-lg transition-all duration-200 cursor-pointer hover:bg-slate-150 dark:hover:bg-gray-700 hover:transform hover:-translate-y-1">
-                <span className="font-medium text-gray-800 dark:text-gray-200 flex-1">
-                  { news.title }
-                </span>
-                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  { news.date }
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
