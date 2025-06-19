@@ -233,28 +233,44 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* news list section */}
+        {/* News List - UPDATED SECTION */}
         <div className="col-start-2 row-start-2 bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-slate-200 dark:border-gray-700">
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-slate-200 dark:border-gray-700">
             News List
           </h3>
           {newsLoading ? (
-            <div className="text-gray-500">Loading news...</div>
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500 mx-auto"></div>
+              <p className="text-gray-500 mt-2">Loading news...</p>
+            </div>
           ) : newsError ? (
-            <div className="text-red-500">{newsError}</div>
+            <div className="text-center py-8">
+              <div className="text-red-500 mb-2">⚠️</div>
+              <p className="text-red-500">{newsError}</p>
+            </div>
           ) : news.length === 0 ? (
-            <div className="text-gray-500">No news available.</div>
+            <div className="text-center py-8">
+              <p className="text-gray-500">No news available.</p>
+            </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="space-y-3 max-h-96 overflow-y-auto">
               {news.map((item, idx) => (
-                <div key={ idx } onClick={()=> setSelectedNews(item)} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-gray-800 rounded-lg transition-all duration-200 cursor-pointer hover:bg-slate-150 dark:hover:bg-gray-700 hover:transform hover:-translate-y-1">
-                <span className="font-medium text-gray-800 dark:text-gray-200 flex-1">
-                  { item.judul }
-                </span>
-                  <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  { item.tanggal }
-                </span>
-              </div>
+                <div 
+                key={idx} 
+                  onClick={() => setSelectedNews(item)} 
+                  className={`p-4 rounded-lg transition-all duration-200 cursor-pointer border-2 ${
+                    selectedNews?.judul === item.judul 
+                      ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-300 dark:border-indigo-600' 
+                      : 'bg-slate-50 dark:bg-gray-800 border-transparent hover:bg-slate-100 dark:hover:bg-gray-700 hover:border-slate-200 dark:hover:border-gray-600'
+                  } hover:transform hover:-translate-y-1 hover:shadow-md`}
+                >
+                  <div className="font-medium text-gray-800 dark:text-gray-200 mb-2 line-clamp-2">
+                    {item.judul}
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {item.tanggal}
+                  </div>
+                </div>
               ))}
             </div>
           )}
