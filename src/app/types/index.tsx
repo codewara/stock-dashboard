@@ -7,6 +7,14 @@ export interface StockData {
     timestamp: string;
 }
 
+export interface NewsItem {
+  ticker: string;
+  title: string;
+  content: string;
+  summary: string;
+  date: string;
+}
+
 export interface ChartData {
     labels: string[];
     datasets: {

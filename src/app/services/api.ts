@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ChartData } from 'chart.js';
-import { DataType, ApiResponse, FinancialSummary } from '@/app/types';
+import { DataType, ApiResponse, FinancialSummary, NewsItem } from '@/app/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -44,14 +44,6 @@ export const fetchFinancialSummary = async (year: string, stock: string): Promis
         return null;
     }
 };
-
-export interface NewsItem {
-  ticker: string;
-  title: string;
-  content: string;
-  summary: string;
-  date: string;
-}
 
 export const fetchNews = async (): Promise<NewsItem[]> => {
   try {
